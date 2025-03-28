@@ -60,13 +60,14 @@ class ObjectDetectionDataModule(pl.LightningDataModule):
         self.num_workers = num_workers
         self.img_dir = img_dir
         self.box_format = box_format
+        
 
         # load annotations
         self.dataset = self._load_dataset(dataset)
 
         # split dataset
-        self.train_dataset = self._create_dataset(train=True, transforms=self.train_transform)
-        self.valid_dataset = self._create_dataset(train=False, transforms=None)
+        self.train_dataset = self._create_dataset(split='train', transforms=self.train_transform)
+        self.valid_dataset = self._create_dataset(split='val', transforms=None)
 
 
     def _load_dataset(self, dataset: Union[str, pd.DataFrame]) -> pd.DataFrame:
@@ -80,7 +81,7 @@ class ObjectDetectionDataModule(pl.LightningDataModule):
 
 
     def _create_dataset(self, 
-                        train: bool = True,
+                        split: str,
                         transforms: Union[List[Callable], Callable] = None
                         ) -> DetectionDataset:
         """Creates a dataset for the given split, tumor type and transforms."""
@@ -88,43 +89,28 @@ class ObjectDetectionDataModule(pl.LightningDataModule):
         if 'split' not in self.dataset.columns:
             raise ValueError(f"Dataset must have column 'split' with values 'train' and 'val'.")
 
-        if train:
+        if split == 'train':
             num_samples = self.num_train_samples
-            dataset = self.dataset[self.dataset.split == 'train']
-            
-            return DetectionDataset(
-                dataset=dataset,
-                img_dir=self.img_dir,
-                filename_col=self.filename_col,
-                label_col=self.label_col,
-                domain_col=self.domain_col,
-                box_format=self.box_format,
-                num_samples=num_samples,
-                fg_prob=self.fg_prob,
-                arb_prob=self.arb_prob,
-                patch_size=self.patch_size,
-                transforms=transforms
-                )
-
-        else:
+        elif split == 'val':
             num_samples = self.num_val_samples
-            dataset = self.dataset[self.dataset.split == 'val']
-
-            return DetectionDataset(
-                dataset=dataset,
-                img_dir=self.img_dir,
-                filename_col=self.filename_col,
-                label_col=self.label_col,
-                domain_col=self.domain_col,
-                box_format=self.box_format,
-                num_samples=num_samples,
-                fg_prob=self.fg_prob,
-                arb_prob=self.arb_prob,
-                patch_size=self.patch_size,
-                transforms=transforms
-                )
-
-
+        elif split == 'test':
+            num_samples = self.num_val_samples
+        
+        dataset = self.dataset[self.dataset.split == split]
+        
+        return DetectionDataset(
+            dataset=dataset,
+            img_dir=self.img_dir,
+            filename_col=self.filename_col,
+            label_col=self.label_col,
+            domain_col=self.domain_col,
+            box_format=self.box_format,
+            num_samples=num_samples,
+            fg_prob=self.fg_prob,
+            arb_prob=self.arb_prob,
+            patch_size=self.patch_size,
+            transforms=transforms
+            )
 
     @property
     def train_transform(self) -> List[Callable]:
@@ -151,5 +137,14 @@ class ObjectDetectionDataModule(pl.LightningDataModule):
                     batch_size=self.batch_size,
                     num_workers=self.num_workers,
                     collate_fn=self.valid_dataset.collate_fn)
+
+
+
+    def test_dataloader(self) -> DataLoader:
+        test_dataset = self._create_dataset(split='test')
+        return DataLoader(dataset=test_dataset,
+                    batch_size=self.batch_size,
+                    num_workers=self.num_workers,
+                    collate_fn=test_dataset.collate_fn)
             
         

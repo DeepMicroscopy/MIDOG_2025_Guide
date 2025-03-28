@@ -102,12 +102,11 @@ class BaseDetectionModule(pl.LightningModule):
             on_epoch=True,
             batch_size=self.hparams.batch_size
         )
-
         return loss
-
-    def validation_step(self, batch: Tuple[torch.Tensor, List[Dict[str, torch.Tensor]]],
+    
+    def _shared_evaluation_step(self, batch: Tuple[torch.Tensor, List[Dict[str, torch.Tensor]]],
                        batch_idx: int) -> None:
-        """Performs a single validation step.
+        """Performs a single validation step to be used for patch-based validation and testing.
 
         Args:
             batch (Tuple[torch.Tensor, List[Dict[str, torch.Tensor]]]): Tuple of images and targets.
@@ -117,7 +116,7 @@ class BaseDetectionModule(pl.LightningModule):
         preds = self(images)
         self.metric.update(preds, targets)
 
-    def on_validation_epoch_end(self) -> None:
+    def _shared_evaluation_epoch_end(self) -> None:
         """Computes and logs validation metrics at the end of the epoch."""
         metrics = self.metric.compute()
 
@@ -128,6 +127,29 @@ class BaseDetectionModule(pl.LightningModule):
         self.log('val/mar', ar, prog_bar=True)
 
         self.metric.reset()
+
+
+    def validation_step(self, batch: Tuple[torch.Tensor, List[Dict[str, torch.Tensor]]],
+                       batch_idx: int) -> None:
+        """Performs the validation step."""
+        self._shared_evaluation_step(batch, batch_idx)
+
+
+    def test_step(self, batch: Tuple[torch.Tensor, List[Dict[str, torch.Tensor]]],
+                       batch_idx: int) -> None:
+        """Performs the test step."""
+        self._shared_evaluation_step(batch, batch_idx)
+
+
+    def on_evaluation_epoch_end(self) -> None:
+        """Computes the validation metrics."""
+        self._shared_evaluation_epoch_end()
+
+
+    def on_test_epoch_end(self) -> None:
+        """Computes the test metrics."""
+        self._shared_evaluation_epoch_end()
+
 
     def configure_optimizers(self) -> Union[List[Optimizer], Tuple[List[Optimizer], List[_LRScheduler]]]:
         """Configures optimizers and learning rate schedulers.
