@@ -1,4 +1,4 @@
-![MIDOG 2025 logo](docs/MIDOG_2025_logo.jpg)
+![MIDOG 2025 logo](docs/MIDOG_2025_logo_purple.png)
 
 # MIDOG 2025 Challenge
 
