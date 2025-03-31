@@ -43,8 +43,8 @@ This repository includes:
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/your-organization/midog2025-challenge.git
-cd midog2025-challenge
+git clone git@github.com:DeepMicroscopy/MIDOG_2025_Guide.git
+cd MIDOG_2025_Guide
 ```
 
 2. Create and activate a virtual environment (recommended):
