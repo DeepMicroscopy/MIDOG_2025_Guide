@@ -103,7 +103,7 @@ class BaseDetectionModule(pl.LightningModule):
             batch_size=self.hparams.batch_size
         )
         return loss
-    
+
     def _shared_evaluation_step(self, batch: Tuple[torch.Tensor, List[Dict[str, torch.Tensor]]],
                        batch_idx: int) -> None:
         """Performs a single validation step to be used for patch-based validation and testing.
@@ -116,15 +116,15 @@ class BaseDetectionModule(pl.LightningModule):
         preds = self(images)
         self.metric.update(preds, targets)
 
-    def _shared_evaluation_epoch_end(self) -> None:
+    def _shared_evaluation_epoch_end(self, prefix: str) -> None:
         """Computes and logs validation metrics at the end of the epoch."""
         metrics = self.metric.compute()
 
         # Log metrics 
         ap = metrics['map_50']
         ar = metrics['mar_500']
-        self.log('val/map', ap, prog_bar=True)
-        self.log('val/mar', ar, prog_bar=True)
+        self.log(f'{prefix}/map', ap, prog_bar=True)
+        self.log(f'{prefix}/mar', ar, prog_bar=True)
 
         self.metric.reset()
 
@@ -141,14 +141,14 @@ class BaseDetectionModule(pl.LightningModule):
         self._shared_evaluation_step(batch, batch_idx)
 
 
-    def on_evaluation_epoch_end(self) -> None:
+    def on_validation_epoch_end(self) -> None:
         """Computes the validation metrics."""
-        self._shared_evaluation_epoch_end()
+        self._shared_evaluation_epoch_end(prefix='val')
 
 
     def on_test_epoch_end(self) -> None:
         """Computes the test metrics."""
-        self._shared_evaluation_epoch_end()
+        self._shared_evaluation_epoch_end(prefix='test')
 
 
     def configure_optimizers(self) -> Union[List[Optimizer], Tuple[List[Optimizer], List[_LRScheduler]]]:
