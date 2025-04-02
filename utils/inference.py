@@ -650,7 +650,7 @@ class ImageProcessor:
     
 
 
-def load_model_from_config(config_file: str, det_thresh: float):
+def load_model_from_config(config_file: str, det_thresh: float=None):
     """Load model from configuration file."""
     try:
         config = ConfigCreator.load(config_file)

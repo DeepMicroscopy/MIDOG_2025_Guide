@@ -301,9 +301,9 @@ def train(args):
         'img_dir': args.img_dir,
         'logger': logger,
         'num_workers': args.num_workers,
+        'nms_thresh': args.nms_thresh, 
         'overlap': args.overlap,
         'overwrite': args.overwrite,
-        'patch_size': args.patch_size,
         'split': args.split,
         'wsi': args.wsi
     } 
