@@ -27,14 +27,12 @@ ARB_PROB = 0.25
 BACKBONE = 'resnext50_32x4d'
 BATCH_SIZE = 6
 BOX_FORMAT = 'cxcy'
-DATASET_FILE = '/data/patho/MIDOGpp/datasets/midogpp_trainvaloptim_702010.csv'
 DET_THRESH = 0.05
 DEVICE = 'cuda'
 DOMAIN_COL = 'tumortype'
 EXP_DIR = 'experiments'
 FG_PROB = 0.5
 GRADIENT_CLIP_VAL = 1
-IMG_DIR = '/data/patho/MIDOGpp/images'
 LR = 1e-4
 MAX_EPOCHS = 150
 MODEL = 'FCOS'
@@ -85,7 +83,7 @@ def get_args():
     parser.add_argument("--arb_prob",                   type=float, default=ARB_PROB, help="Percentage of random patches.")
     parser.add_argument("--batch_size",                 type=int, default=BATCH_SIZE, help="Batch size.")
     parser.add_argument("--box_format",                 type=str, default=BOX_FORMAT, help='Box format (default: xyxy).')
-    parser.add_argument("--dataset_file",               type=str, default=DATASET_FILE, help="Dataset filepath.")
+    parser.add_argument("--dataset_file",               type=str, help="Your path/to/dataset_file.")
     parser.add_argument("--det_thresh",                 type=float, default=DET_THRESH, help="Box score threshold.")
     parser.add_argument("--device",     	            type=str, default=DEVICE, help="Device.")
     parser.add_argument("--domain_col",                 type=str, default=DOMAIN_COL, help='Column with domain identifier.')
@@ -93,7 +91,7 @@ def get_args():
     parser.add_argument("--fast_dev_run",               action="store_true", help="Fast dev run.")
     parser.add_argument("--fg_prob",                    type=float, default=FG_PROB, help="Mitosis percentage.")
     parser.add_argument("--gradient_clip_val",          type=int, default=GRADIENT_CLIP_VAL, help="Norm for clipping gradients.")
-    parser.add_argument("--img_dir",                    type=str, default=IMG_DIR, help="Image directory.")
+    parser.add_argument("--img_dir",                    type=str, help="Your path/to/images.")
     parser.add_argument("--lr",                         type=float, default=LR, help="Learning rate.")
     parser.add_argument("--max_epochs",                 type=int, default=MAX_EPOCHS, help="Maximum epochs of training.")
     parser.add_argument("--num_classes",                type=int, default=NUM_CLASSES, help="Number of classes.")
