@@ -8,7 +8,6 @@ import pandas as pd
 import torch
 
 from pathlib import Path 
-from tiatoolbox.tools.stainaugment import StainAugmentor
 from torch.utils.data import DataLoader
 
 from .dataset import DetectionDataset
@@ -116,7 +115,7 @@ class ObjectDetectionDataModule(pl.LightningDataModule):
     def train_transform(self) -> List[Callable]:
         aug_pipeline = A.Compose([
             A.D4(p=1),
-            StainAugmentor(method='vahadane', sigma1=0.25, sigma2=0.1, p=0.5),
+            A.ColorJitter(brightness=(0.9, 1.1), contrast=(0.9, 1.1), saturation=(0.9, 1.1), hue=(-0.1, 0.1), p=0.5),
             A.Defocus(radius=(1,3), p=0.3),
         ], bbox_params=A.BboxParams(format='pascal_voc', min_visibility=0.3, label_fields=['class_labels'])
         )
