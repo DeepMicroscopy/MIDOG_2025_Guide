@@ -7,6 +7,7 @@ ipykernel
 lightning
 matplotlib
 numpy
+nbformat
 opencv_python
 openslide_python
 plotly
