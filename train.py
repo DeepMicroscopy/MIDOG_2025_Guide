@@ -55,13 +55,17 @@ WEIGHTS = 'IMAGENET1K_V2'
 MIN_THRESH = 0.2
 OVERLAP = 0.3
 SPLIT = 'optim'
-ENTITY = 'jonas_amme'
-PRECISION = '16-mixed'
+ENTITY = 'your-entity'
 
 
 
 def get_args():
     parser = argparse.ArgumentParser()
+
+    # Required parameters
+    parser.add_argument("--img_dir",                    type=str, help="Your path/to/images.")
+    parser.add_argument("--dataset_file",               type=str, help="Your path/to/dataset_file.")
+    parser.add_argument("--entity",                     type=str, default=ENTITY, help="WandB username.")
 
     # Model specific parameters
     parser.add_argument("--anchor_ratios",              type=float, nargs='+' ,default=ANCHOR_RATIOS, help="Anchor ratios.")
@@ -76,14 +80,12 @@ def get_args():
     parser.add_argument("--exp_dir",                    type=str, default=EXP_DIR, help='Directory to save models.',           )
     parser.add_argument("--run_name",                   type=str, default=RUN_NAME, help="Directory within exp_dir to save results for that run.")
     parser.add_argument("--project",                    type=str, default=PROJECT, help="WandB project name.")
-    parser.add_argument("--entity",                     type=str, default=ENTITY, help="WandB username.")
 
     # Training specific parameters 
     parser.add_argument("--accelerator",                type=str, default=ACCELERATOR, help="Accelerator (gpu or cpu)")
     parser.add_argument("--arb_prob",                   type=float, default=ARB_PROB, help="Percentage of random patches.")
     parser.add_argument("--batch_size",                 type=int, default=BATCH_SIZE, help="Batch size.")
     parser.add_argument("--box_format",                 type=str, default=BOX_FORMAT, help='Box format (default: xyxy).')
-    parser.add_argument("--dataset_file",               type=str, help="Your path/to/dataset_file.")
     parser.add_argument("--det_thresh",                 type=float, default=DET_THRESH, help="Box score threshold.")
     parser.add_argument("--device",     	            type=str, default=DEVICE, help="Device.")
     parser.add_argument("--domain_col",                 type=str, default=DOMAIN_COL, help='Column with domain identifier.')
@@ -91,7 +93,6 @@ def get_args():
     parser.add_argument("--fast_dev_run",               action="store_true", help="Fast dev run.")
     parser.add_argument("--fg_prob",                    type=float, default=FG_PROB, help="Mitosis percentage.")
     parser.add_argument("--gradient_clip_val",          type=int, default=GRADIENT_CLIP_VAL, help="Norm for clipping gradients.")
-    parser.add_argument("--img_dir",                    type=str, help="Your path/to/images.")
     parser.add_argument("--lr",                         type=float, default=LR, help="Learning rate.")
     parser.add_argument("--max_epochs",                 type=int, default=MAX_EPOCHS, help="Maximum epochs of training.")
     parser.add_argument("--num_classes",                type=int, default=NUM_CLASSES, help="Number of classes.")
@@ -105,7 +106,6 @@ def get_args():
     parser.add_argument("--top_k",                      type=int, default=TOP_K, help="Monitor checkpoints")
     parser.add_argument("--trainable_backbone_layers",  type=int, default=TRAINABLE_BACKBONE_LAYERS, help="No. trainable backbone layers")
     parser.add_argument("--weights",                    type=str, default=WEIGHTS, help="Pretraining weights.")
-    parser.add_argument("--wsi",                        action="store_true", help="Processes WSI")
 
     # Optimize specific parameters 
     parser.add_argument("--nms_thresh",                 type=float, default=NMS_THRESH, help="Final NMS threshold.")
@@ -305,7 +305,7 @@ def train(args):
         'overlap': args.overlap,
         'overwrite': args.overwrite,
         'split': args.split,
-        'wsi': args.wsi
+        'wsi': False
     } 
 
     # Optimize detection threshold
