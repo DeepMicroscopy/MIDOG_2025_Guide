@@ -408,15 +408,15 @@ class Torchvision_Inference(Strategy):
                     device=pred['boxes'].device
                 )               
 
-                boxes_list.append(boxes)
-                scores_list.append(pred['scores'])
-                labels_list.append(pred['labels'])
+                boxes_list.append(boxes.cpu())
+                scores_list.append(pred['scores'].cpu())
+                labels_list.append(pred['labels'].cpu())
 
         if not boxes_list:
             return {
-                'boxes': torch.empty((0, 4), device=self.device),
-                'scores': torch.empty(0, device=self.device),
-                'labels': torch.empty(0, device=self.device)
+                'boxes': torch.empty((0, 4), device='cpu'),
+                'scores': torch.empty(0, device='cpu'),
+                'labels': torch.empty(0, device='cpu')
             }
 
         # Concatenate all predictions
@@ -497,9 +497,9 @@ class Torchvision_Inference(Strategy):
 
         # Convert to numpy arrays
         return {
-            'boxes': results['boxes'].cpu().numpy(),
-            'scores': results['scores'].cpu().numpy(),
-            'labels': results['labels'].cpu().numpy()
+            'boxes': results['boxes'].numpy(),
+            'scores': results['scores'].numpy(),
+            'labels': results['labels'].numpy()
         }
     
 
