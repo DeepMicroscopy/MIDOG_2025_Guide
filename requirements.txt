@@ -4,6 +4,7 @@ Pillow
 PyYAML
 faster-coco-eval
 ipykernel
+ipywidgets
 lightning
 matplotlib
 numpy
