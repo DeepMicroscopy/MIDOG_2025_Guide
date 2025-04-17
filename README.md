@@ -25,7 +25,8 @@ Join our Discord community to connect with other participants, ask questions, an
 This repository includes:
 
 - `MIDOG2025_01_Exploratory_Data_Analysis.ipynb`: A notebook introducing the MIDOGpp dataset with exploratory data analysis
-- `MIDOG2025_02_Simple_Training.ipynb`: Example implementation of a basic training pipeline
+- `MIDOG2025_02_Simple_Training.ipynb`: Example implementation of a basic object detection pipeline
+- `MIDOG2025_03_AMF_Classification.ipynb`: Example implementation of a basic classification pipeline
 - `requirements.txt`: Required Python packages for running the notebooks
 - `utils/`: Utility functions and helper scripts
 
@@ -60,7 +61,7 @@ pip install -r requirements.txt
 
 ## Dataset Access
 
-The [MIDOGpp](https://github.com/DeepMicroscopy/MIDOGpp) dataset used in this repository is available online and can be downloaded with the `download_MIDOGpp.py` script. 
+The [MIDOGpp](https://github.com/DeepMicroscopy/MIDOGpp) dataset used in this repository is available online and can be downloaded with the `download_MIDOGpp.py` script. The links to download the datasets for classification can be found at our [MIDOG 2025 Datasets Page](https://midog2025.deepmicroscopy.org/datasets/).
 
 ## Example Notebooks
 
@@ -71,12 +72,18 @@ The first notebook (`MIDOG2025_01_Exploratory_Data_Analysis.ipynb`) provides:
 - Visualization of sample images and annotations
 
 
-### 2. Basic Training Implementation
+### 2. Basic Object Detection Pipeline
 The second notebook (`MIDOG2025_02_Simple_Training.ipynb`) demonstrates:
 - How to prepare the dataset for training
 - How to use this repository to create a model 
 - A simple model training setup
 - Visualizations of predictions
+
+### 3. Basic Classification Pipeline
+The third notebook (`MIDOG20205_03_AMF_Classification.ipynb`) demonstrates:
+- How to download the MIDOG 2025 Atypical Dataset
+- Exploratory analysis of atypical mitotic figures
+- A simple model training setup with k-fold cross validation
 
 
 ## Additional Resources
